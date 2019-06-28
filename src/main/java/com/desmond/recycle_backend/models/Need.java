@@ -12,12 +12,20 @@ public class Need {
     private String name;
     private double price;
     private String tags;
-    private int buyer;
+    private long buyer;
+    private Long book_id;
     private Timestamp created_at;
     private Timestamp updated_at;
 
     public Need() {
         super();
+    }
+
+    public Need(String name, double price, String tags, long buyer) {
+        this.name = name;
+        this.price = price;
+        this.tags = tags;
+        this.buyer = buyer;
     }
 
     public String getName() {
@@ -44,11 +52,11 @@ public class Need {
         this.tags = tags;
     }
 
-    public int getBuyer() {
+    public long getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(int buyer) {
+    public void setBuyer(long buyer) {
         this.buyer = buyer;
     }
 
@@ -74,5 +82,13 @@ public class Need {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Long getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(Long book_id) {
+        this.book_id = book_id;
     }
 }

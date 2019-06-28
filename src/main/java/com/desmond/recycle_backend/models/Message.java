@@ -14,6 +14,16 @@ public class Message {
     private int sender;
     private int receiver;
 
+    public Message(){
+        super();
+    }
+
+    public Message(String content, int sender, int receiver) {
+        this.content = content;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
     public long getId() {
         return id;
     }

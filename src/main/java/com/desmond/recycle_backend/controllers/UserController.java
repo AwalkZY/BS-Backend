@@ -1,5 +1,6 @@
 package com.desmond.recycle_backend.controllers;
 
+import com.desmond.recycle_backend.helper.Constant;
 import com.desmond.recycle_backend.helper.GlobalFunction;
 import com.desmond.recycle_backend.models.Response;
 import com.desmond.recycle_backend.models.User;
@@ -7,16 +8,16 @@ import com.desmond.recycle_backend.repository.UserRepository;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserController {
+class UserController {
     private UserRepository userRepository;
 
-    public UserController(UserRepository userRepository){
+    UserController(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
-    public Map login(Map<String, String[]> request) {
-        String username = request.getOrDefault("username", new String[]{""})[0];
-        String password = request.getOrDefault("password", new String[]{""})[0];
+    Map login(Map<String, String[]> request) {
+        String username = request.get("username")[0];
+        String password = request.get("password")[0];
         Map<String, Object> data = new HashMap<>();
         User user = this.userRepository.findByName(username);
         if (user != null && user.getPassword().equals(GlobalFunction.encrypt("SHA1", password))) {
@@ -26,10 +27,10 @@ public class UserController {
         return new Response(data, "您输入的用户名或密码有误，请重新输入", 401).toMap();
     }
 
-    public Map register(Map<String, String[]> request) {
-        String username = request.getOrDefault("username", new String[]{""})[0];
-        String password = request.getOrDefault("password", new String[]{""})[0];
-        String email = request.getOrDefault("email", new String[]{""})[0];
+    Map register(Map<String, String[]> request) {
+        String username = request.get("username")[0];
+        String password = request.get("password")[0];
+        String email = request.get("email")[0];
         Map<String, Object> data = new HashMap<>();
         int duplication = this.userRepository.countByEmail(email) + 10 * this.userRepository.countByName(username);
         if (duplication == 0) {
@@ -42,7 +43,8 @@ public class UserController {
         }
     }
 
-    public Map editInfo(Map<String, String[]> request) {
+    Map editInfo(Map<String, String[]> request) {
         return new HashMap();
     }
+
 }

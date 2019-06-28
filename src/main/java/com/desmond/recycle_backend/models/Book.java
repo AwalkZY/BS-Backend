@@ -2,6 +2,7 @@ package com.desmond.recycle_backend.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
@@ -16,14 +17,28 @@ public class Book {
     private double original;
     private double current;
     private String tags;
-    private int status;
-    private int buyer;
-    private int seller;
+    private Long buyer;
+    private long seller;
+    private String deliver;
     private Timestamp created_at;
     private Timestamp updated_at;
 
     public Book(){
         super();
+    }
+
+    public Book(String name, String ISBN, String description, String image, double original, double current, String tags, long seller, String deliver) {
+        this.name = name;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.image = image;
+        this.original = original;
+        this.current = current;
+        this.tags = tags;
+        this.seller = seller;
+        this.deliver = deliver;
+        this.buyer = 0L;
+        this.created_at = this.updated_at = new Timestamp(new Date().getTime());
     }
 
     public String getName() {
@@ -82,27 +97,19 @@ public class Book {
         this.current = current;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getBuyer() {
+    public Long getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(int buyer) {
+    public void setBuyer(Long buyer) {
         this.buyer = buyer;
     }
 
-    public int getSeller() {
+    public long getSeller() {
         return seller;
     }
 
-    public void setSeller(int seller) {
+    public void setSeller(long seller) {
         this.seller = seller;
     }
 
@@ -128,5 +135,13 @@ public class Book {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getDeliver() {
+        return deliver;
+    }
+
+    public void setDeliver(String deliver) {
+        this.deliver = deliver;
     }
 }

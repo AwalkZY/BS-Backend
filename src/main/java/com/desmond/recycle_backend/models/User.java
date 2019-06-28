@@ -3,6 +3,8 @@ package com.desmond.recycle_backend.models;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "user")
@@ -14,6 +16,7 @@ public class User {
     private String email;
     private String password;
     private String token;
+    private String avatar;
     private Timestamp created_at;
     private Timestamp updated_at;
 
@@ -22,7 +25,6 @@ public class User {
     }
 
     public User(String name, String email, String password, String token) {
-        super();
         this.name = name;
         this.email = email;
         this.password = password;
@@ -80,5 +82,22 @@ public class User {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Map toMap() {
+        Map<String, String> result = new HashMap<>();
+        result.put("name",this.name);
+        result.put("email", this.email);
+        result.put("avatar", this.avatar);
+        result.put("id", String.valueOf(this.id));
+        return result;
     }
 }
