@@ -2,6 +2,9 @@ package com.desmond.recycle_backend.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "message")
@@ -11,17 +14,18 @@ public class Message {
     private long id;
     private String content;
     private Timestamp time;
-    private int sender;
-    private int receiver;
+    private long sender;
+    private long receiver;
 
     public Message(){
         super();
     }
 
-    public Message(String content, int sender, int receiver) {
+    public Message(String content, long sender, long receiver) {
         this.content = content;
         this.sender = sender;
         this.receiver = receiver;
+        this.time = new Timestamp(new Date().getTime());
     }
 
     public long getId() {
@@ -48,19 +52,28 @@ public class Message {
         this.time = time;
     }
 
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 
-    public void setSender(int sender) {
+    public void setSender(long sender) {
         this.sender = sender;
     }
 
-    public int getReceiver() {
+    public long getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(int receiver) {
+    public void setReceiver(long receiver) {
         this.receiver = receiver;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> ans = new HashMap<>();
+        ans.put("id",this.id);
+        ans.put("sender", this.sender);
+        ans.put("receiver", this.receiver);
+        ans.put("content", this.content);
+        return ans;
     }
 }

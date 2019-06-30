@@ -2,6 +2,9 @@ package com.desmond.recycle_backend.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "need")
@@ -26,6 +29,7 @@ public class Need {
         this.price = price;
         this.tags = tags;
         this.buyer = buyer;
+        this.created_at = this.updated_at = new Timestamp(new Date().getTime());
     }
 
     public String getName() {
@@ -90,5 +94,16 @@ public class Need {
 
     public void setBook_id(Long book_id) {
         this.book_id = book_id;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> ans = new HashMap<>();
+        ans.put("id",this.id);
+        ans.put("name", this.name);
+        ans.put("buyer", this.buyer);
+        ans.put("tags", this.tags);
+        ans.put("price", this.price);
+        ans.put("book_id", this.book_id);
+        return ans;
     }
 }

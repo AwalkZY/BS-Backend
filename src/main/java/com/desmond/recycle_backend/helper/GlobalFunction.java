@@ -1,5 +1,9 @@
 package com.desmond.recycle_backend.helper;
 
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,12 +12,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 public class GlobalFunction {
-    private static String salt = "ERE1UVJ^Lem6iKQH";
 
     public static String uglify(String text) {
         StringBuilder uglyText = new StringBuilder();
         for (int pointer = 0; pointer < text.length(); pointer++) {
-            uglyText.append(text.charAt(pointer) + salt.charAt(pointer % salt.length()));
+            uglyText.append(text.charAt(pointer) + Config.salt.charAt(pointer % Config.salt.length()));
         }
         return uglyText.toString();
     }
@@ -42,8 +45,27 @@ public class GlobalFunction {
 
     public static Map<String, String[]> request2Map(HttpServletRequest request){
         String token = request.getHeader("token");
+//        System.out.println(token);
         Map<String, String[]> result = new HashMap<>(request.getParameterMap());
         result.put("token", new String[]{token});
         return result;
+    }
+
+    public static String getBase64Img(String filename) {
+        File file = new File("upload/"+filename);
+        if (!file.exists())
+            return "";
+        else {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                int len = fis.available();
+                byte[] buffer = new byte[len];
+                fis.read(buffer);
+                fis.close();
+                return "data:image/jpeg;base64,"+Base64.encodeBase64String(buffer);
+            } catch (Exception e) {
+                return "";
+            }
+        }
     }
 }

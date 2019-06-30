@@ -1,8 +1,16 @@
 package com.desmond.recycle_backend.models;
 
+import org.apache.commons.codec.binary.Base64;
+
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.desmond.recycle_backend.helper.GlobalFunction.getBase64Img;
 
 @Entity
 @Table(name = "book")
@@ -143,5 +151,21 @@ public class Book {
 
     public void setDeliver(String deliver) {
         this.deliver = deliver;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("name",this.name);
+        result.put("ISBN",this.ISBN);
+        result.put("description",this.description);
+        result.put("original",this.original);
+        result.put("current",this.current);
+        result.put("tags",this.tags);
+        result.put("buyer",this.buyer);
+        result.put("seller",this.seller);
+        result.put("deliver",this.deliver);
+        result.put("id", this.id);
+        result.put("image", getBase64Img(this.image));
+        return result;
     }
 }

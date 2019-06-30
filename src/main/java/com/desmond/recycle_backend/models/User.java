@@ -1,10 +1,15 @@
 package com.desmond.recycle_backend.models;
 
 import javax.persistence.*;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.codec.binary.Base64;
+
+import static com.desmond.recycle_backend.helper.GlobalFunction.getBase64Img;
 
 @Entity
 @Table(name = "user")
@@ -24,11 +29,12 @@ public class User {
         super();
     }
 
-    public User(String name, String email, String password, String token) {
+    public User(String name, String email, String password, String token, String avatar) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.token = token;
+        this.avatar = avatar;
         this.created_at = this.updated_at = new Timestamp(new Date().getTime());
     }
 
@@ -92,12 +98,12 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Map toMap() {
-        Map<String, String> result = new HashMap<>();
+    public Map toMap(){
+        Map<String, Object> result = new HashMap<>();
         result.put("name",this.name);
         result.put("email", this.email);
-        result.put("avatar", this.avatar);
-        result.put("id", String.valueOf(this.id));
+        result.put("avatar", getBase64Img(this.avatar));
+        result.put("id", this.id);
         return result;
     }
 }

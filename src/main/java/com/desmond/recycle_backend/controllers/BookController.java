@@ -1,15 +1,20 @@
 package com.desmond.recycle_backend.controllers;
 
+import com.desmond.recycle_backend.helper.Constant;
 import com.desmond.recycle_backend.models.Book;
 import com.desmond.recycle_backend.models.Need;
 import com.desmond.recycle_backend.models.Response;
+import com.desmond.recycle_backend.models.User;
 import com.desmond.recycle_backend.repository.BookRepository;
 import com.desmond.recycle_backend.repository.NeedRepository;
 import com.desmond.recycle_backend.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.desmond.recycle_backend.helper.GlobalFunction.getBase64Img;
 
 class BookController {
     private BookRepository bookRepository;
@@ -24,13 +29,33 @@ class BookController {
 
     Map getAllBook(Map<String, String[]> request){
         Map<String, Object> data = new HashMap<>();
-        List<Book> ans = bookRepository.findAll();
+        String field = request.getOrDefault("field", Constant.Nothing)[0];
+        String value = request.getOrDefault("value", Constant.Nothing)[0];
+        List<Book> books = bookRepository.findAll();
+        if (!value.isEmpty()) {
+//            System.out.println(field);
+            switch (field){
+                case "name": books = bookRepository.findBooksByNameLike(value); break;
+                case "ISBN": books = bookRepository.findBooksByISBNLike(value); break;
+                case "tags": books = bookRepository.findBooksByTagsLike(value); break;
+            }
+        }
+        List<Map<String, Object>> ans = new ArrayList<>();
+        books.forEach(book -> {
+            Map<String, Object> bookMap = book.toMap();
+//            System.out.println(book.getName());
+            User seller = userRepository.findById(book.getSeller()).get();
+            bookMap.put("seller", seller.getName());
+            bookMap.put("sellerAvatar", getBase64Img(seller.getAvatar()));
+            ans.add(bookMap);
+        });
         data.put("info", ans);
         return new Response(data, "", 200).toMap();
+
     }
     Map addBook(Map<String, String[]> request) {
         String name = request.get("name")[0];
-        String ISBN = request.get("isbn")[0];
+        String ISBN = request.get("ISBN")[0];
         String description = request.get("description")[0];
         String image = request.get("image")[0];
         String tags = request.get("tags")[0];
